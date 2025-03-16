@@ -7,11 +7,29 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body class="h-[100dvh] grid grid-cols-3 grid-rows-2">
-    <aside class="bg-red-950 row-span-2">
-      <h1>Investment Calculator</h1>
+    <aside class="bg-gradient-to-r from-indigo-400 from-8% via-sky-500 via-20% to-emerald-400 to-70% ... row-span-2 flex flex-col justify-between py-5 px-2">
+      <h1 class="text-2xl font-bold text-gray-950 dark:text-white px-6">Investment Calculator</h1>
+      <form class="w-full">
+        <div class="flex w-full flex-col" >
+          <label for="return-rate">Profitability</label>
+          <div class="flex">
+            <input value="%"  class="w-1/8" type="text" disabled>
+            <input type="text" class="w-1/2" id="return-rate">
+            <!-- <input type="text" class="1/1" value="mensal"> -->
+             <select id="evaluation-period" class="w-1/3">
+              <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
+            </select>
+          </div>
+        </div>
+      </form>
+      <div class="flex w-full">
+        <button>Calculate</button>
+        <button>Clean</button>
+      </div>
     </aside>
     <main>
-      <p>Resultados</p>
+      <p>Findings</p>
     </main>
     
   </body>
