@@ -1,8 +1,8 @@
-function convertToMontlyReturnRate(yearlyReturnRate) {
+function convertToMonthlyReturnRate(yearlyReturnRate) {
   return yearlyReturnRate ** (1 / 12);
 }
 
-function generateReturnArray(
+export function generateReturnArray(
   startingAmount = 0,
   timeHorizon = 0,
   timePeriod = "monthly",
@@ -10,7 +10,7 @@ function generateReturnArray(
   returnRate = 0,
   returnTimeFrame = "monthly"
 ) {
-  if (!timeHorizon || startingAmount) {
+  if (!timeHorizon || !startingAmount) {
     throw new Error(
       "Initial investment and deadline must be filled with positive values."
     );
@@ -19,7 +19,7 @@ function generateReturnArray(
   const finalReturnRate =
     returnTimeFrame === "monthly"
       ? 1 + returnRate / 100
-      : convertToMontlyReturnRate(1 + returnRate / 100);
+      : convertToMonthlyReturnRate(1 + returnRate / 100);
 
   const finalTimeHorizon =
     timePeriod === "monthly" ? timeHorizon : timeHorizon * 12;
@@ -43,11 +43,11 @@ function generateReturnArray(
     returnsArray.push({
       investedAmount,
       interestReturns,
-      totalInterestReturn,
+      totalInterestReturns,
       month: timeReference,
       totalAmount,
 
     })
   }
+  return returnsArray
 }
-return returnsArray

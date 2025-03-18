@@ -9,26 +9,26 @@
     <body class="h-[100dvh] grid grid-cols-3 grid-rows-2">
       <aside class="bg-gradient-to-r from-indigo-400 from-8% via-sky-500 via-20% to-emerald-400 to-70% ... row-span-2 flex flex-col justify-between py-5 px-2">
         <h1 class="text-2xl font-bold px-6">Investment Calculator</h1>
-          <form class="w-full">
+          <form id="investment-form" class="w-full">
             <div class="flex w-full flex-col px-4 my-2">
               <label for="starting-amount" class="font-bold text-gray-700">Starting Amount</label>
               <div class="flex">
                 <input value="R$" class="w-1/7 rounded-l-lg text-center" type="text" disabled>
-                <input type="text" class="w-4/4 bg-white rounded-r-lg px-2" id="starting-amount" placeholder="0.00">
+                <input type="text" class="w-4/4 bg-white rounded-r-lg px-2" id="starting-amount" name="starting-amount" placeholder="0.00" required>
               </div>
             </div>
             <div class="flex w-full flex-col px-4 my-2">
               <label for="additional-contribution" class="font-bold text-gray-700">Additional contributions</label>
               <div class="flex">
                 <input value="R$" class="w-1/7 rounded-l-lg text-center " type="text" disabled>
-                <input type="text" class="w-4/4 bg-white rounded-r-lg px-2" id="additional-contribution" placeholder="0.00">
+                <input type="text" class="w-4/4 bg-white rounded-r-lg px-2" id="additional-contribution" placeholder="0.00" name="additional-contribution" required>
               </div>
             </div>
             <div class="flex w-full flex-col px-4 my-2">
               <label for="after" class="font-bold text-gray-700">After</label>
               <div class="flex">
-                <input type="text" class="w-2/3 bg-white rounded-l-lg px-2" id="after" placeholder="How many months/years">
-                <select id="period-after" class="w-1/3 rounded-r-lg border-l-2 border-emerald-600 bg-white text-center 
+                <input type="text" class="w-2/3 bg-white rounded-l-lg px-2" id="after" name="after"  placeholder="How many months/years" required>
+                <select id="period-after" name="period-after" class="w-1/3 rounded-r-lg border-l-2 border-emerald-600 bg-white text-center 
                 hover:bg-emerald-700 hover:text-white" >
                   <option value="monthly">Monthly</option>
                   <option value="yearly">Yearly</option>
@@ -39,8 +39,8 @@
               <label for="return-rate" class="font-bold text-gray-700">Return rate</label>
               <div class="flex">
                 <input value="%" class="w-1/5 rounded-l-lg text-center" type="text" disabled>
-                <input type="text" class="w-5/6 bg-white px-1" id="return-rate" placeholder="0">
-                <select id="evaluation-period" class="w-1/2 rounded-r-lg border-l-2 border-emerald-600 bg-white text-center 
+                <input type="text" class="w-5/6 bg-white px-1" id="return-rate" name="return-rate" placeholder="0" required>
+                <select id="evaluation-period" name="evaluation-period" class="w-1/2 rounded-r-lg border-l-2 border-emerald-600 bg-white text-center 
                 hover:bg-emerald-700 hover:text-white">
                   <option value="monthly">Monthly</option>
                   <option value="yearly">Yearly</option>
@@ -51,18 +51,19 @@
               <label for="tax-rate" class="font-bold text-gray-700">Profit tax</label>
               <div class="flex">
                 <input value="%" class="w-1/7 rounded-l-lg text-center " type="text" disabled>
-                <input type="text" class="w-4/4 bg-white rounded-r-lg px-1" id="tax-rate" placeholder="0">
+                <input type="text" class="w-4/4 bg-white rounded-r-lg px-1" id="tax-rate" name="tax-rate" placeholder="0" required>
               </div>
             </div>
           </form>
         <div class="flex h-12 px-6 my-8 w-full gap-2">
-          <button class="w-1/2 rounded-lg bg-emerald-950 text-slate-200 hover:bg-emerald-800 ">Calculate</button>
+          <button id="calculate-results" form="investment-form" type="submit" class="w-1/2 rounded-lg bg-emerald-950 text-slate-200 hover:bg-emerald-800 ">Calculate</button>
           <button class="w-1/2 rounded-lg hover:bg-emerald-500 hover:text-white">Clean</button>
         </div>
       </aside>
       <main>
         <p>Findings</p>
       </main>
+      <script type="module" src="src/main.js"></script>
       
     </body>
 </html>
