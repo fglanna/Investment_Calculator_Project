@@ -10,10 +10,13 @@ export function generateReturnArray(
   returnRate = 0,
   returnTimeFrame = "monthly"
 ) {
-  if (!timeHorizon || !startingAmount) {
-    throw new Error(
-      "Initial investment and deadline must be filled with positive values."
-    );
+  if(typeof startingAmount !== 'number' || 
+            startingAmount <= 0 || typeof 
+            timeHorizon !== 'number' || 
+            timeHorizon <= 0) {    
+      throw new Error(
+        "Initial investment and deadline must be filled with positive values."
+      );
   }
 
   const finalReturnRate =
@@ -33,21 +36,25 @@ export function generateReturnArray(
   };
 
   const returnsArray = [referenceInvestmentObject];
-  for (let timeReference = 1; timeReference <= finalTimeHorizon; timeReference++) {
+  for (
+    let timeReference = 1;
+    timeReference <= finalTimeHorizon;
+    timeReference++
+  ) {
     const totalAmount =
       returnsArray[timeReference - 1].totalAmount * finalReturnRate +
       monthlyContribution;
-    const interestReturns = returnsArray[timeReference - 1].totalAmount * finalReturnRate
-    const investedAmount = startingAmount + (monthlyContribution * timeReference)
-    const totalInterestReturns = totalAmount - investedAmount
+    const interestReturns =
+      returnsArray[timeReference - 1].totalAmount * finalReturnRate;
+    const investedAmount = startingAmount + monthlyContribution * timeReference;
+    const totalInterestReturns = totalAmount - investedAmount;
     returnsArray.push({
       investedAmount,
       interestReturns,
       totalInterestReturns,
       month: timeReference,
       totalAmount,
-
-    })
+    });
   }
-  return returnsArray
+  return returnsArray;
 }

@@ -1,7 +1,13 @@
 @import "tailwindcss";
 
-.rounded-l-lg{
-    border: 0.2px solid rgb(87, 87, 187);
-    font-weight: 600;
-    
+@layer utilities {
+    .error {
+       @apply border-2;
+       @apply border-red-600;
+       @apply rounded-lg;
+
+    }
+
 }
+
+
