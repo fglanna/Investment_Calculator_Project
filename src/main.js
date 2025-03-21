@@ -112,15 +112,14 @@ function renderProgression(evt) {
             data: returnsArray.map((investmentObject) =>
               formatCurrency(investmentObject.investedAmount)
             ),
-            backgroundColor: "rgb(255, 99, 132)", // Vermelho
+            backgroundColor: "rgb(255, 99, 132)", 
           },
           {
             label: "Return on investment",
             data: returnsArray.map((investmentObject) => {
-              console.log("interestReturns:", investmentObject.interestReturns);
               return formatCurrency(investmentObject.interestReturns);
             }),
-            backgroundColor: "rgb(0, 20, 255)" // Azul
+            backgroundColor: "rgb(54, 162, 235)" 
           },
         ],
       },
@@ -128,11 +127,10 @@ function renderProgression(evt) {
         responsive: true,
         scales: {
           x: {
-            stacked: false,
+            stacked: true,
           },
           y: {
-            stacked: false,
-            beginAtZero: true,
+            stacked: true,
           },
         },
       },

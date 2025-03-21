@@ -60,14 +60,14 @@
           <button id="clear-form" class="w-1/2 rounded-lg hover:bg-emerald-500 hover:text-white">Clean</button>
         </div>
       </aside>
-      <main class="h-full">
-        <section id="charts-container">
-          <div class="h-[36dvh]">
-            <p>Final result</p>
+      <main class="row-span-2 col-span-2">
+        <section id="charts-container" class="h-full">
+          <div class="h-[36%] flex flex-col items-center pb-10">
+            <p class="font-bold text-lg">Final result</p>
             <canvas id="final-money-distribution"></canvas>
           </div>
-          <div class="h-[56dvh]">
-            <p>Progression</p>
+          <div class="h-[56%] flex flex-col items-center">
+            <p class="font-bold text-lg">Progression</p>
             <Canvas id="progression"></Canvas>
           </div>
         </section>
