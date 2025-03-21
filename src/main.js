@@ -1,58 +1,177 @@
 import { generateReturnArray } from "../investmentGoals";
+import {
+  Chart,
+  DoughnutController,
+  ArcElement,
+  Tooltip,
+  Legend,
+  BarController,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+} from "chart.js";
 
+Chart.register(
+  DoughnutController,
+  ArcElement,
+  Tooltip,
+  Legend,
+  BarController,
+  CategoryScale,
+  LinearScale,
+  BarElement
+);
+
+const finalMoneyChart = document
+  .getElementById("final-money-distribution")
+  .getContext("2d");
+const progressionChart = document.getElementById("progression");
 const form = document.getElementById("investment-form");
-const clearFormButton = document.getElementById('clear-form')
+const clearFormButton = document.getElementById("clear-form");
+
+let doughnutChartReference = {};
+let progressionChartReference = {};
+
+function formatCurrency(value) {
+  return value.toFixed(2);
+}
 
 function renderProgression(evt) {
   evt.preventDefault();
-  if (document.querySelector("error")) {
+  if (document.querySelector(".error")) {
     return;
   }
-  const startingAmountString = form["starting-amount"].value.replace(",", ".");
-  const startingAmount = Number(startingAmountString);
-  const additionalContributionString = document
-    .getElementById("additional-contribution")
-    .value.replace(",", ".");
-  const additionalContribution = Number(additionalContributionString);
+
+  resetCharts();
+
+  const startingAmount = Number(
+    document.getElementById("starting-amount").value.replace(",", ".")
+  );
+  const additionalContribution = Number(
+    document.getElementById("additional-contribution").value.replace(",", ".")
+  );
   const after = Number(document.getElementById("after").value);
   const periodAfter = document.getElementById("period-after").value;
-  const returnRateString = document
-    .getElementById("return-rate")
-    .value.replace(",", ".");
-  const returnRate = Number(returnRateString);
+  const returnRate = Number(
+    document.getElementById("return-rate").value.replace(",", ".")
+  );
   const returnRatePeriod = document.getElementById("evaluation-period").value;
-  const taxRateString = document
-    .getElementById("tax-rate")
-    .value.replace(",", ".");
-  const taxRate = Number(taxRateString);
-
+  const taxRate = Number(
+    document.getElementById("tax-rate").value.replace(",", ".")
+  );
+  
   const returnsArray = generateReturnArray(
     startingAmount,
-    additionalContribution,
     after,
     periodAfter,
+    additionalContribution,
     returnRate,
     returnRatePeriod
   );
 
-  console.log(returnsArray);
+  const finalInvestmentObject = returnsArray[returnsArray.length - 1];
+  
+  if (finalMoneyChart) {
+    doughnutChartReference = new Chart(finalMoneyChart, {
+      type: "doughnut",
+      data: {
+        labels: ["Total invested", "Yield", "Tax"],
+        datasets: [
+          {
+            data: [
+              formatCurrency(finalInvestmentObject.investedAmount),
+              formatCurrency(
+                finalInvestmentObject.totalInterestReturns * (1 - taxRate / 100)
+              ),
+              formatCurrency(
+                finalInvestmentObject.totalInterestReturns * (taxRate / 100)
+              ),
+            ],
+            backgroundColor: [
+              "rgb(255, 99, 132)",
+              "rgb(54, 162, 235)",
+              "rgb(255, 205, 86)",
+            ],
+            hoverOffset: 4,
+          },
+        ],
+      },
+    });
+  } else {
+    console.error("Could`n get context from finalMoneyChart");
+  }
+
+  if (progressionChart) {
+    progressionChartReference = new Chart(progressionChart, {
+      type: "bar",
+      data: {
+        labels: returnsArray.map((investmentObject) => investmentObject.month),
+        datasets: [
+          {
+            label: "Total invested",
+            data: returnsArray.map((investmentObject) =>
+              formatCurrency(investmentObject.investedAmount)
+            ),
+            backgroundColor: "rgb(255, 99, 132)", // Vermelho
+          },
+          {
+            label: "Return on investment",
+            data: returnsArray.map((investmentObject) => {
+              console.log("interestReturns:", investmentObject.interestReturns);
+              return formatCurrency(investmentObject.interestReturns);
+            }),
+            backgroundColor: "rgb(0, 20, 255)" // Azul
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            stacked: false,
+          },
+          y: {
+            stacked: false,
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  } else {
+    console.error("Could`n get context from progressionChart");
+  }
+
+}
+
+function isObjectEmpty(obj) {
+  return Object.keys(obj).length === 0;
+}
+
+function resetCharts() {
+  if (
+    !isObjectEmpty(doughnutChartReference) &&
+    !isObjectEmpty(progressionChartReference)
+  ) {
+    doughnutChartReference.destroy();
+    progressionChartReference.destroy();
+  }
 }
 
 function clearForm() {
-  form['starting-amount'].value = ""
-  form['additional-contribution'].value = ""
-  form['after'].value = ""
-  form['return-rate'].value = ""
-  form['tax-rate'].value = ""
+  form["starting-amount"].value = "";
+  form["additional-contribution"].value = "";
+  form["after"].value = "";
+  form["return-rate"].value = "";
+  form["tax-rate"].value = "";
 
-  const errorInputsContainers = document.querySelectorAll('.error');
+  resetCharts();
 
-  for(const errorInputsContainer of errorInputsContainers) {
-    errorInputsContainer.classList.remove('error')
-    errorInputsContainer.parentElement.querySelector('p').remove()
+  const errorInputsContainers = document.querySelectorAll(".error");
+
+  for (const errorInputsContainer of errorInputsContainers) {
+    errorInputsContainer.classList.remove("error");
+    errorInputsContainer.parentElement.querySelector("p").remove();
   }
-  
-  
 }
 
 function validateInput(evt) {
@@ -65,7 +184,8 @@ function validateInput(evt) {
   const inputValue = evt.target.value.replace(",", ".");
   if (
     (!parentElement.classList.contains("error") && isNaN(inputValue)) ||
-    Number(inputValue) <= 0) {
+    Number(inputValue) <= 0
+  ) {
     const errorTextElement = document.createElement("p");
     errorTextElement.classList.add("text-red-500");
     errorTextElement.innerText = "Enter a numeric value greater than zero.";
@@ -86,5 +206,5 @@ for (const formElement of form) {
     formElement.addEventListener("blur", validateInput);
 }
 
-form.addEventListener("submit", renderProgression)
-clearFormButton.addEventListener('click', clearForm)
+form.addEventListener("submit", renderProgression);
+clearFormButton.addEventListener("click", clearForm);
