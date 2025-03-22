@@ -23,7 +23,7 @@ export function generateReturnArray(
 
   const finalReturnRate =
     returnTimeFrame === "monthly"
-      ? 1 + returnRate / 100 / 12
+      ? 1 + returnRate / 100 
       : convertToMonthlyReturnRate(1 + returnRate / 100);
 
   const finalTimeHorizon =

@@ -1,4 +1,5 @@
 import { generateReturnArray } from "../investmentGoals";
+import { createTable } from "./table";
 import {
   Chart,
   DoughnutController,
@@ -22,9 +23,7 @@ Chart.register(
   BarElement
 );
 
-const finalMoneyChart = document
-  .getElementById("final-money-distribution")
-  .getContext("2d");
+const finalMoneyChart = document.getElementById("final-money-distribution");
 const progressionChart = document.getElementById("progression");
 const form = document.getElementById("investment-form");
 const clearFormButton = document.getElementById("clear-form");
@@ -32,8 +31,32 @@ const clearFormButton = document.getElementById("clear-form");
 let doughnutChartReference = {};
 let progressionChartReference = {};
 
+const columnsArray = [
+  { columnLabel: "Month", accessor: "month" },
+  {
+    columnLabel: "Total Invested",
+    accessor: "investedAmount",
+    format: (numberInfo) => formatCurrency(numberInfo),
+  },
+  {
+    columnLabel: "Montly Income",
+    accessor: "interestReturns",
+    format: (numberInfo) => formatCurrency(numberInfo),
+  },
+  {
+    columnLabel: "Total Income",
+    accessor: "totalInterestReturns",
+    format: (numberInfo) => formatCurrency(numberInfo),
+  },
+  {
+    columnLabel: "Total Amount",
+    accessor: "totalAmount",
+    format: (numberInfo) => formatCurrency(numberInfo),
+  },
+];
+
 function formatCurrency(value) {
-  return value.toFixed(2);
+  return value.toLocaleString("pt-br", { style: "currency", currency: "BRL" });
 }
 
 function renderProgression(evt) {
@@ -59,7 +82,7 @@ function renderProgression(evt) {
   const taxRate = Number(
     document.getElementById("tax-rate").value.replace(",", ".")
   );
-  
+
   const returnsArray = generateReturnArray(
     startingAmount,
     after,
@@ -69,7 +92,7 @@ function renderProgression(evt) {
     returnRatePeriod
   );
 
-  const finalInvestmentObject = returnsArray[returnsArray.length - 1];
+  /*const finalInvestmentObject = returnsArray[returnsArray.length - 1];
   
   if (finalMoneyChart) {
     doughnutChartReference = new Chart(finalMoneyChart, {
@@ -137,8 +160,9 @@ function renderProgression(evt) {
     });
   } else {
     console.error("Could`n get context from progressionChart");
-  }
+  }*/
 
+  createTable(columnsArray, returnsArray, "results-table");
 }
 
 function isObjectEmpty(obj) {
